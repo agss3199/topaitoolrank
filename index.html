@@ -1,15 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-D98KCREKZC"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-D98KCREKZC');
-</script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
@@ -168,14 +159,19 @@
     </div>
   </section>
 
-  <!-- ✅ Latest Articles section (blog not ready yet) -->
+  <!-- ✅ Latest Articles section (NOW AUTO FROM JSON) -->
   <section class="content" id="latest">
     <div class="container">
       <div class="content-grid">
 
         <div>
           <h2 class="section-title">Latest Articles</h2>
-          <div class="article-card" style="padding:18px;">
+
+          <!-- AUTO-RENDER LIST -->
+          <div class="article-list" id="latest-articles"></div>
+
+          <!-- Fallback (only shown if JSON fails / empty) -->
+          <div class="article-card" id="latest-fallback" style="padding:18px; display:none;">
             <p style="margin:0; color:#334155;">
               We’re publishing articles soon. Meanwhile, explore the top tools and comparisons.
             </p>
@@ -189,7 +185,12 @@
 
         <aside class="sidebar">
           <h3 class="sidebar-title">Top Articles</h3>
-          <div class="article-card" style="padding:18px;">
+
+          <!-- AUTO-RENDER TOP LIST -->
+          <ul class="top-list" id="top-articles"></ul>
+
+          <!-- Fallback (only shown if JSON fails / empty) -->
+          <div class="article-card" id="top-fallback" style="padding:18px; display:none;">
             <p style="margin:0; color:#334155;">
               Coming soon.
             </p>
@@ -235,9 +236,136 @@
   </div>
 </footer>
 
-<!-- ✅ Blog JSON loader removed because blog/articles are not live yet -->
+<!-- ✅ JSON loader (SAFE + does not affect other sections) -->
+<script>
+(function () {
+  const POSTS_URL = "/data/posts.json";
+  const LATEST_COUNT = 6;
+  const TOP_COUNT = 6;
+
+  function byDateDesc(a, b) {
+    const da = new Date(a.published_at || a.updated_at || 0).getTime();
+    const db = new Date(b.published_at || b.updated_at || 0).getTime();
+    return db - da;
+  }
+
+  function scoreTop(post) {
+    // Priority order:
+    // 1) pinned
+    // 2) featured
+    // 3) views_30d
+    // 4) clicks_30d
+    let score = 0;
+    if (post.pinned) score += 1000000;
+    if (post.featured) score += 100000;
+    const v = (post.stats && post.stats.views_30d) ? post.stats.views_30d : 0;
+    const c = (post.stats && post.stats.clicks_30d) ? post.stats.clicks_30d : 0;
+    score += (v * 10) + (c * 3);
+    return score;
+  }
+
+  function esc(s) {
+    return String(s || "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  function fmtDate(iso) {
+    if (!iso) return "";
+    const d = new Date(iso);
+    if (isNaN(d.getTime())) return "";
+    return d.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
+  }
+
+  function findCategory(categories, category_id) {
+    if (!Array.isArray(categories)) return null;
+    return categories.find(c => c.id === category_id) || null;
+  }
+
+  function renderLatest(data) {
+    const latestWrap = document.getElementById("latest-articles");
+    const latestFallback = document.getElementById("latest-fallback");
+    if (!latestWrap) return;
+
+    const posts = Array.isArray(data.posts) ? data.posts.slice() : [];
+    posts.sort(byDateDesc);
+
+    const latest = posts.slice(0, LATEST_COUNT);
+    if (latest.length === 0) {
+      if (latestFallback) latestFallback.style.display = "block";
+      return;
+    }
+
+    latestWrap.innerHTML = latest.map(post => {
+      const cat = findCategory(data.categories, post.category_id);
+      const catName = cat ? cat.name : "";
+      const catUrl = cat ? cat.url : "";
+      const date = fmtDate(post.published_at || post.updated_at);
+      const read = post.reading_minutes ? `${post.reading_minutes} min read` : "";
+      const href = post.url || ((data.site && data.site.default_blog_path ? data.site.default_blog_path : "/blog/") + post.slug + ".html");
+
+      return `
+        <div class="article-card">
+          <a href="${esc(href)}">
+            <h3>${esc(post.title)}</h3>
+            <p>${esc(post.excerpt)}</p>
+            <div class="article-meta">
+              ${catUrl ? `<span class="pill"><a href="${esc(catUrl)}">${esc(catName)}</a></span>` : (catName ? `<span class="pill">${esc(catName)}</span>` : "")}
+              ${date ? `<span>${esc(date)}</span>` : ""}
+              ${read ? `<span>${esc(read)}</span>` : ""}
+            </div>
+          </a>
+        </div>
+      `;
+    }).join("");
+  }
+
+  function renderTop(data) {
+    const topWrap = document.getElementById("top-articles");
+    const topFallback = document.getElementById("top-fallback");
+    if (!topWrap) return;
+
+    const posts = Array.isArray(data.posts) ? data.posts.slice() : [];
+    posts.sort((a, b) => scoreTop(b) - scoreTop(a));
+
+    const top = posts.slice(0, TOP_COUNT);
+    if (top.length === 0) {
+      if (topFallback) topFallback.style.display = "block";
+      return;
+    }
+
+    topWrap.innerHTML = top.map((post, idx) => {
+      const date = fmtDate(post.published_at || post.updated_at);
+      const href = post.url || ((data.site && data.site.default_blog_path ? data.site.default_blog_path : "/blog/") + post.slug + ".html");
+      return `
+        <li class="top-item">
+          <div class="top-rank">${idx + 1}</div>
+          <div>
+            <a href="${esc(href)}">${esc(post.title)}</a>
+            ${date ? `<div class="top-sub">${esc(date)}</div>` : ``}
+          </div>
+        </li>
+      `;
+    }).join("");
+  }
+
+  fetch(POSTS_URL, { cache: "no-store" })
+    .then(r => r.ok ? r.json() : Promise.reject(new Error("posts.json not found")))
+    .then(data => {
+      renderLatest(data);
+      renderTop(data);
+    })
+    .catch(() => {
+      const latestFallback = document.getElementById("latest-fallback");
+      const topFallback = document.getElementById("top-fallback");
+      if (latestFallback) latestFallback.style.display = "block";
+      if (topFallback) topFallback.style.display = "block";
+    });
+})();
+</script>
 
 </body>
-
 </html>
-
