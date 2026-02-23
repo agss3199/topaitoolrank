@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.0",
+  "site": {
+    "base_url": "https://topaitoolrank.com",
+    "default_blog_path": "/blog/"
+  },
+  "categories": [
+    { "id": "ai-writing", "name": "AI Writing", "url": "/categories/ai-writing-tools.html" },
+    { "id": "ai-marketing", "name": "AI Marketing", "url": "/categories/ai-marketing-tools.html" },
+    { "id": "ai-sales", "name": "AI Sales", "url": "/categories/ai-sales-tools.html" },
+    { "id": "ai-video", "name": "AI Video", "url": "/categories/ai-video-tools.html" },
+    { "id": "ai-presentation", "name": "AI Presentation", "url": "/categories/ai-presentation-tools.html" },
+    { "id": "ai-research", "name": "AI Research", "url": "/categories/ai-research-tools.html" },
+    { "id": "ai-hr", "name": "AI HR", "url": "/categories/ai-hr-tools.html" },
+    { "id": "ai-productivity", "name": "AI Productivity", "url": "/categories/ai-productivity-tools.html" }
+  ],
+  "posts": [
+     
+    {
+      "id": "ai-that-makes-presentations-complete-2026-guide",
+      "title": "AI That Makes Presentations (Complete 2026 Guide)",
+      "slug": "ai-that-makes-presentations-complete-2026-guide",
+      "url": "/blog/ai-that-makes-presentations-complete-2026-guide.html",
+      "excerpt": "AI tools can turn prompts or docs into structured, designed slide decks fast—learn how they work, which tools to use, and common mistakes to avoid.",
+      "category_id": "ai-presentation",
+      "published_at": "2026-02-23",
+      "updated_at": "2026-02-23",
+      "cover_image": "/Images/Blog/ai-that-makes-presentations-complete-2026-guide.png",
+      "tags": ["presentations", "powerpoint", "slides", "pitch deck", "design"],
+      "reading_minutes": 12,
+      "pinned": false,
+      "featured": true,
+      "stats": {
+        "views_30d": 0,
+        "clicks_30d": 0
+      }
+    }
+  ]
+}
