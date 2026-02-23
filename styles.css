@@ -276,8 +276,8 @@ nav a:hover {
 
 .content-grid {
   display: grid;
-  grid-template-columns: 1fr 320px;
-  gap: 26px;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 24px;
   align-items: start;
 }
 
@@ -298,6 +298,7 @@ nav a:hover {
   padding: 16px;
   transition: 0.2s ease;
   background: #ffffff;
+  min-width: 0;
 }
 
 .article-card:hover {
@@ -344,6 +345,8 @@ nav a:hover {
   background: #f8fafc;
   position: sticky;
   top: 78px; /* below sticky navbar */
+  width: 100%;
+  min-width: 0;
 }
 
 .sidebar-title {
@@ -511,4 +514,39 @@ footer {
   .logo {
     font-size: 17px;
   }
+}
+
+/* =========================
+   JSON Articles Enhancements (Safe)
+========================= */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  font-weight: 700;
+  color: #475569;
+}
+
+.pill a {
+  color: #475569;
+  text-decoration: none;
+}
+
+.pill a:hover {
+  color: #2563eb;
+  text-decoration: underline;
+}
+/* =========================
+   BLOG LAYOUT FIX (force columns)
+========================= */
+.content-grid > article {
+  grid-column: 1;
+}
+
+.content-grid > aside {
+  grid-column: 2;
 }
