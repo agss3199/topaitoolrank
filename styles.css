@@ -347,6 +347,7 @@ nav a:hover {
   top: 78px; /* below sticky navbar */
   width: 100%;
   min-width: 0;
+  align-self: start;
 }
 
 .sidebar-title {
@@ -548,5 +549,9 @@ footer {
 }
 
 .content-grid > aside {
+  grid-column: 2;
+
+}
+.content-grid .sidebar {
   grid-column: 2;
 }
