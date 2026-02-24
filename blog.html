@@ -1,1 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+  <title>Blog | TopAIToolRank</title>
+  <meta name="description" content="Browse all TopAIToolRank blog posts by category. Find AI tools guides, comparisons, and practical how-tos—organized like Netflix rows for fast discovery." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://topaitoolrank.com/blog.html" />
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="blog.css" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="Images/Branding/Top-AI-Tool-Rank-Favicon.png" />
+  <link rel="apple-touch-icon" href="Images/Branding/Top-AI-Tool-Rank-Favicon.png" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Blog | TopAIToolRank" />
+  <meta property="og:description" content="Browse all blog posts by category—AI tools guides, comparisons, and practical how-tos." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://topaitoolrank.com/blog.html" />
+  <meta property="og:image" content="https://topaitoolrank.com/Images/Branding/Top-AI-Tool-Rank-Favicon.png" />
+
+  <!-- Schema: CollectionPage -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "TopAIToolRank Blog",
+    "url": "https://topaitoolrank.com/blog.html",
+    "description": "Browse all TopAIToolRank blog posts by category.",
+    "isPartOf": {
+      "@type": "WebSite",
+      "name": "TopAIToolRank",
+      "url": "https://topaitoolrank.com"
+    }
+  }
+  </script>
+
+  <!-- Schema: Breadcrumbs -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://topaitoolrank.com/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Blog",
+        "item": "https://topaitoolrank.com/blog.html"
+      }
+    ]
+  }
+  </script>
+</head>
+
+<body>
+
+<header class="navbar">
+  <div class="container nav-inner">
+    <div class="logo">
+      <a href="index.html">TopAIToolRank</a>
+    </div>
+
+    <nav aria-label="Primary Navigation">
+      <a href="index.html#categories">Categories</a>
+      <a href="index.html#bestof">Best Of</a>
+      <a href="index.html#comparisons">Comparisons</a>
+      <a href="index.html#free">Free Tools</a>
+      <a href="blog.html" aria-current="page">Blog</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <!-- Blog hero -->
+  <section class="hero">
+    <div class="container">
+      <h1>Blog</h1>
+      <p>
+        Browse all articles by category. New posts get added to <code>/data/posts.json</code> and appear here automatically.
+      </p>
+
+      <div class="hero-buttons">
+        <a href="#blog-rows" class="btn-primary">Browse Categories</a>
+        <a href="index.html#latest" class="btn-secondary">Latest Articles</a>
+      </div>
+
+      <div class="trust-line" id="blog-updated">
+        Updated regularly
+      </div>
+    </div>
+  </section>
+
+  <!-- Netflix-style rows -->
+  <section class="blog-rows" id="blog-rows">
+    <div class="container">
+      <div class="blog-toolbar" role="search">
+        <label class="sr-only" for="blogSearch">Search posts</label>
+        <input id="blogSearch" class="blog-search" type="search" placeholder="Search posts (title, excerpt, tags)..." autocomplete="off" />
+      </div>
+
+      <div id="blogRowsMount"></div>
+
+      <!-- fallback -->
+      <div class="article-card" id="blogRowsFallback" style="padding:18px; display:none;">
+        <p style="margin:0; color:#334155;">
+          No posts found yet. Add posts to <code>/data/posts.json</code> and they will show up here.
+        </p>
+        <div style="margin-top:10px;">
+          <a href="index.html#bestof">See Top Tools →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="container footer-inner">
+    <div>
+      <strong>TopAIToolRank</strong><br>
+      Discover and compare AI tools.
+    </div>
+
+    <div class="footer-links">
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="privacy-policy.html">Privacy Policy</a>
+      <a href="affiliate-disclosure.html">Affiliate Disclosure</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  const POSTS_URL = "/data/posts.json"; // matches your homepage loader
+  const PER_ROW = 12;
+
+  const mount = document.getElementById("blogRowsMount");
+  const fallback = document.getElementById("blogRowsFallback");
+  const searchEl = document.getElementById("blogSearch");
+  const updatedEl = document.getElementById("blog-updated");
+
+  function esc(s) {
+    return String(s || "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  function fmtDate(iso) {
+    if (!iso) return "";
+    const d = new Date(iso);
+    if (isNaN(d.getTime())) return "";
+    return d.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
+  }
+
+  function byDateDesc(a, b) {
+    const da = new Date(a.published_at || a.updated_at || 0).getTime();
+    const db = new Date(b.published_at || b.updated_at || 0).getTime();
+    return db - da;
+  }
+
+  function normalizeText(post) {
+    const tags = Array.isArray(post.tags) ? post.tags.join(" ") : "";
+    return (post.title + " " + post.excerpt + " " + tags).toLowerCase();
+  }
+
+  function pickHref(data, post) {
+    return post.url || ((data.site && data.site.default_blog_path ? data.site.default_blog_path : "/blog/") + post.slug + ".html");
+  }
+
+  function renderRows(data, q) {
+    if (!mount) return;
+
+    const categories = Array.isArray(data.categories) ? data.categories.slice() : [];
+    const postsAll = Array.isArray(data.posts) ? data.posts.slice() : [];
+    postsAll.sort(byDateDesc);
+
+    const query = (q || "").trim().toLowerCase();
+    const posts = query
+      ? postsAll.filter(p => normalizeText(p).includes(query))
+      : postsAll;
+
+    // Find latest updated/published date for the “Updated” line (nice for SEO + UX)
+    const latestIso = postsAll.length ? (postsAll[0].published_at || postsAll[0].updated_at) : "";
+    if (updatedEl) {
+      const d = fmtDate(latestIso);
+      updatedEl.textContent = d ? ("Updated " + d) : "Updated regularly";
+    }
+
+    // Build category -> posts mapping
+    const byCat = new Map();
+    categories.forEach(c => byCat.set(c.id, []));
+    posts.forEach(p => {
+      if (!byCat.has(p.category_id)) byCat.set(p.category_id, []);
+      byCat.get(p.category_id).push(p);
+    });
+
+    // Render: only show categories that have posts when searching.
+    // When not searching: show all categories, even if empty, with “Coming soon”.
+    const html = categories.map(cat => {
+      const list = (byCat.get(cat.id) || []).slice(0, PER_ROW);
+      const totalCount = (byCat.get(cat.id) || []).length;
+
+      const showEmpty = !query; // show empty rows only when not searching
+      if (!showEmpty && totalCount === 0) return "";
+
+      const rowCards = totalCount
+        ? list.map(post => {
+            const href = pickHref(data, post);
+            const date = fmtDate(post.published_at || post.updated_at);
+            const read = post.reading_minutes ? (post.reading_minutes + " min read") : "";
+            const img = post.cover_image ? post.cover_image : "";
+
+            return `
+              <article class="rail-card" aria-label="${esc(post.title)}">
+                <a class="rail-link" href="${esc(href)}">
+                  ${img ? `<img class="rail-img" src="${esc(img)}" alt="${esc(post.title)} cover image" loading="lazy" decoding="async">` : `<div class="rail-img rail-img--placeholder" aria-hidden="true"></div>`}
+                  <div class="rail-body">
+                    <h3 class="rail-title">${esc(post.title)}</h3>
+                    <p class="rail-excerpt">${esc(post.excerpt)}</p>
+                    <div class="rail-meta">
+                      ${date ? `<span>${esc(date)}</span>` : ""}
+                      ${read ? `<span>•</span><span>${esc(read)}</span>` : ""}
+                    </div>
+                  </div>
+                </a>
+              </article>
+            `;
+          }).join("")
+        : `
+          <div class="rail-empty">
+            No posts yet in <strong>${esc(cat.name)}</strong>. Coming soon.
+          </div>
+        `;
+
+      return `
+        <section class="rail" aria-label="${esc(cat.name)} category">
+          <div class="rail-head">
+            <h2 class="rail-h2">
+              ${cat.url ? `<a href="${esc(cat.url)}">${esc(cat.name)}</a>` : esc(cat.name)}
+            </h2>
+            <div class="rail-sub">
+              ${totalCount ? (esc(String(totalCount)) + " post" + (totalCount === 1 ? "" : "s")) : "Coming soon"}
+            </div>
+          </div>
+
+          <div class="rail-track" tabindex="0" role="group" aria-label="${esc(cat.name)} posts">
+            ${rowCards}
+          </div>
+        </section>
+      `;
+    }).join("");
+
+    mount.innerHTML = html;
+
+    const hasAny = mount.textContent.trim().length > 0 && (postsAll.length > 0);
+    if (!hasAny) {
+      if (fallback) fallback.style.display = "block";
+    } else {
+      if (fallback) fallback.style.display = "none";
+    }
+  }
+
+  function debounce(fn, delay) {
+    let t;
+    return function () {
+      clearTimeout(t);
+      const args = arguments;
+      t = setTimeout(() => fn.apply(null, args), delay);
+    };
+  }
+
+  fetch(POSTS_URL, { cache: "no-store" })
+    .then(r => r.ok ? r.json() : Promise.reject(new Error("posts.json not found")))
+    .then(data => {
+      renderRows(data, "");
+      if (searchEl) {
+        searchEl.addEventListener("input", debounce(() => renderRows(data, searchEl.value), 120));
+      }
+    })
+    .catch(() => {
+      if (fallback) fallback.style.display = "block";
+    });
+})();
+</script>
+
+</body>
+</html>
