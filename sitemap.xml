@@ -130,7 +130,14 @@
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
-
+ <!-- Blog Index Page -->
+  <url>
+    <loc>https://topaitoolrank.com/blog.html</loc>
+    <lastmod>2026-02-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
   <!-- /blog -->
   <url>
     <loc>https://topaitoolrank.com/blog/ai-that-makes-presentations-complete-2026-guide.html</loc>
@@ -138,4 +145,5 @@
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+
 </urlset>
