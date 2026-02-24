@@ -9,11 +9,11 @@
   <meta name="robots" content="index, follow" />
 
   <!-- CSS -->
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="/styles.css" />
 
   <!-- Favicon -->
-  <link rel="icon" type="image/png" href="Images/Branding/Top-AI-Tool-Rank-Favicon.png" />
-  <link rel="apple-touch-icon" href="Images/Branding/Top-AI-Tool-Rank-Favicon.png" />
+  <link rel="icon" type="image/png" href="/Images/Branding/Top-AI-Tool-Rank-Favicon.png" />
+  <link rel="apple-touch-icon" href="/Images/Branding/Top-AI-Tool-Rank-Favicon.png" />
 
   <!-- Open Graph -->
   <meta property="og:title" content="Top AI Tools Ranked by Use Case" />
@@ -36,26 +36,28 @@
     }
   }
   </script>
+  <script src="/assets/includes.js" defer></script>
 </head>
 
 <body>
 
-<header class="navbar">
-  <div class="container nav-inner">
-    <div class="logo">
-      <a href="index.html">TopAIToolRank</a>
+<div id="site-header"></div>
+<noscript>
+  <header class="navbar">
+    <div class="container nav-inner">
+      <div class="logo">
+        <a href="/">TopAIToolRank</a>
+      </div>
+      <nav aria-label="Primary Navigation">
+        <a href="/#categories">Categories</a>
+        <a href="/#bestof">Best Of</a>
+        <a href="/#comparisons">Comparisons</a>
+        <a href="/#free">Free Tools</a>
+        <a href="/blog.html">Blog</a>
+      </nav>
     </div>
-
-    <nav aria-label="Primary Navigation">
-      <a href="#categories">Categories</a>
-      <a href="#bestof">Best Of</a>
-      <a href="#comparisons">Comparisons</a>
-      <a href="#free">Free Tools</a>
-      <!-- ✅ Blog page is live -->
-     <a href="blog.html">Blog</a>
-    </nav>
-  </div>
-</header>
+  </header>
+</noscript>
 
 <main>
 
@@ -220,21 +222,23 @@
 
 </main>
 
-<footer>
-  <div class="container footer-inner">
-    <div>
-      <strong>TopAIToolRank</strong><br>
-      Discover and compare AI tools.
+<div id="site-footer"></div>
+<noscript>
+  <footer>
+    <div class="container footer-inner">
+      <div>
+        <strong>TopAIToolRank</strong><br>
+        Discover and compare AI tools.
+      </div>
+      <div class="footer-links">
+        <a href="/about.html">About</a>
+        <a href="/contact.html">Contact</a>
+        <a href="/privacy-policy.html">Privacy Policy</a>
+        <a href="/affiliate-disclosure.html">Affiliate Disclosure</a>
+      </div>
     </div>
-
-    <div class="footer-links">
-      <a href="about.html">About</a>
-      <a href="contact.html">Contact</a>
-      <a href="privacy-policy.html">Privacy Policy</a>
-      <a href="affiliate-disclosure.html">Affiliate Disclosure</a>
-    </div>
-  </div>
-</footer>
+  </footer>
+</noscript>
 
 <!-- ✅ JSON loader (SAFE + does not affect other sections) -->
 <script>
@@ -370,3 +374,4 @@
 </body>
 
 </html>
+
