@@ -312,6 +312,12 @@ nav a:hover {
   line-height: 1.4;
 }
 
+.article-card h3,
+.top-item a {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
 .article-card p {
   margin: 0;
   font-size: 14px;
@@ -542,14 +548,23 @@ footer {
   text-decoration: underline;
 }
 /* =========================
-   BLOG LAYOUT FIX (force columns)
+   BLOG / HOME LAYOUT FIX (safe)
 ========================= */
-.content-grid > article {
-  grid-column: 1;
+@media (min-width: 901px) {
+  .content-grid > article {
+    grid-column: 1;
+  }
+
+  .content-grid > aside {
+    grid-column: 2;
+  }
 }
 
-.content-grid > aside {
-  grid-column: 2;
-
+@media (max-width: 900px) {
+  .content-grid > article,
+  .content-grid > aside {
+    grid-column: 1;
+  }
 }
+
 
