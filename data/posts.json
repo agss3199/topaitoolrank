@@ -15,6 +15,25 @@
     { "id": "ai-productivity", "name": "AI Productivity", "url": "/categories/ai-productivity-tools.html" }
   ],
   "posts": [
+    {
+  "id": "ai-video-tools-complete-2026-guide",
+  "title": "AI Video Tools (Complete 2026 Guide)",
+  "slug": "ai-video-tools-complete-2026-guide",
+  "url": "/blog/ai-video-tools-complete-2026-guide.html",
+  "excerpt": "AI video tools can generate, edit, and repurpose videos from prompts, scripts, or footage—learn how they work, what types exist, and how to choose the best tool in 2026.",
+  "category_id": "ai-video",
+  "published_at": "2026-02-26",
+  "updated_at": "2026-02-26",
+  "cover_image": "/Images/Blog/ai-video-tools-complete-2026-guide.png",
+  "tags": ["ai video", "video generator", "text to video", "video editing", "shorts", "reels"],
+  "reading_minutes": 14,
+  "pinned": false,
+  "featured": true,
+  "stats": {
+    "views_30d": 0,
+    "clicks_30d": 0
+  }
+},
      
     {
       "id": "ai-that-makes-presentations-complete-2026-guide",
@@ -36,4 +55,5 @@
       }
     }
   ]
+
 }
